@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <!-- Metadata & SEO -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StoryAPP</title>
+    <meta name="description" content="StoryAPP - Ceritakan dan abadikan momenmu dalam satu aplikasi." />
+    <meta name="theme-color" content="#4299e1" />
+    <base href="/" />
+
+    <!-- Favicon & PWA Manifest -->
+    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Leaflet JS & CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- App Main JS -->
+    <script type="module" src="/src/scripts/index.js" defer></script>
+
+    <!-- Styling -->
+    <style>
+      :root {
+        --primary-color: #4299e1;
+        --secondary-color: #38a169;
+        --text-dark: #2d3748;
+        --text-light: #718096;
+        --bg-light: #f7fafc;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background: var(--bg-light);
+        color: var(--text-dark);
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+      }
+
+      .main-header {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .brand-name {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        text-decoration: none;
+      }
+
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        padding: 0.5rem;
+        background: var(--primary-color);
+        color: #fff;
+        border-radius: 4px;
+        text-decoration: none;
+        z-index: 200;
+      }
+
+      .skip-link:focus {
+        top: 0;
+      }
+
+      nav {
+        position: relative;
+      }
+
+      .nav-list {
+        display: flex;
+        gap: 1rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .nav-list li a {
+        color: var(--text-light);
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: background 0.2s;
+      }
+
+      .nav-list li a:hover,
+      .nav-list li a:focus {
+        background: var(--bg-light);
+        color: var(--primary-color);
+        outline: none;
+      }
+
+      .drawer-button {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      #logoutLink {
+        background: #fef2f2;
+        color: #dc2626;
+      }
+
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        min-height: calc(100vh - 76px);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .nav-list {
+          display: none;
+          position: absolute;
+          top: 100%;
+          right: 1rem;
+          flex-direction: column;
+          background: #fff;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          padding: 1rem;
+        }
+
+        .nav-list.active {
+          display: flex;
+        }
+
+        .drawer-button {
+          display: block;
+        }
+      }
+
+      .card {
+        position: relative;
+        width: 300px;
+        background: #fff;
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e2e8f0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .fav-btn {
+        align-self: flex-end;
+        margin-bottom: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: var(--primary-color);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.5em 1em;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .fav-btn:hover {
+        background-color: #2b6cb0;
+      }
+
+      .fav-btn i {
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Lompat ke konten</a>
+
+    <header role="banner" aria-label="Header StoryAPP">
+      <div class="main-header">
+        <a href="#/" class="brand-name" aria-label="Beranda StoryAPP">StoryAPP</a>
+        <nav role="navigation" aria-label="Menu Utama">
+          <ul id="nav-list" class="nav-list" role="menubar">
+            <li role="none"><a role="menuitem" href="#/"><i class="fas fa-home"></i> Beranda</a></li>
+            <li role="none"><a role="menuitem" href="#/favorites"><i class="fas fa-star"></i> Favorit</a></li>
+            <li role="none"><a role="menuitem" href="#/about"><i class="fas fa-info-circle"></i> Tentang</a></li>
+            <li class="auth-link" role="none"><a role="menuitem" href="#/login"><i class="fas fa-sign-in-alt"></i> Masuk</a></li>
+            <li class="auth-link" role="none"><a role="menuitem" href="#/register"><i class="fas fa-user-plus"></i> Daftar</a></li>
+            <li role="none"><a role="menuitem" href="#" id="logoutLink" hidden><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+          </ul>
+        </nav>
+        <button id="drawer-button" class="drawer-button" aria-label="Buka menu" aria-controls="nav-list" aria-expanded="false">☰</button>
+      </div>
+    </header>
+
+    <main id="main-content" role="main" tabindex="-1">
+      <!-- Contoh tombol favorit -->
+      <div style="margin-top: 1rem;">
+        <button class="fav-btn" aria-label="Tambahkan ke favorit">
+          <i class="fas fa-star"></i>
+          <span>Favorit</span>
+        </button>
+      </div>
+    </main>
+
+    <script>
+      // Menu drawer toggle
+      const btn = document.getElementById("drawer-button");
+      const nav = document.getElementById("nav-list");
+
+      btn.addEventListener("click", () => {
+        const expanded = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!expanded));
+        nav.classList.toggle("active");
+
+        if (!expanded) {
+          nav.querySelector("a")?.focus();
+        } else {
+          btn.focus();
+        }
+      });
+    </script>
+  </body>
+</html>
